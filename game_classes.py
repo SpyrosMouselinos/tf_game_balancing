@@ -1,4 +1,3 @@
-import numpy as np
 from numpy.random import randint
 
 
@@ -22,8 +21,8 @@ class BaseClass(object):
     def set_current_hp(self, hp):
         self.current_hp = hp
 
-    def set_speed(self,speed):
-        self.speed =speed
+    def set_speed(self, speed):
+        self.speed = speed
 
     def get_atk(self):
         return self.attack
@@ -85,7 +84,7 @@ class Wizard(GameClass):
 
     @classmethod
     def make_random_wizard(cls, ranges):
-        return cls(hp_range=ranges['hp'], attack_range=ranges['attack'],defense_range=ranges['defense'],
+        return cls(hp_range=ranges['hp'], attack_range=ranges['attack'], defense_range=ranges['defense'],
                    speed_range=ranges['speed'])
 
 
