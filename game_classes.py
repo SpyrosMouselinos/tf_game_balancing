@@ -1,4 +1,4 @@
-from numpy.random import randint
+import numpy as np
 
 
 class BaseClass(object):
@@ -39,10 +39,15 @@ class BaseClass(object):
     def get_current_hp(self):
         return self.current_hp
 
-    def attack(self, opponent):
+    def fight(self, opponent):
         if isinstance(opponent, BaseClass):
-            damage = self.get_atk() - opponent.get_def()
-            return opponent.set_current_hp(opponent.get_current_hp() - damage)
+            damage = 0.5*(self.get_atk() * 0.8 + self.get_speed() * 0.2)
+            if opponent.get_def() > self.get_atk():
+                damage -= np.abs(opponent.get_def() - self.get_atk())*0.6
+            else:
+                damage -= np.abs(opponent.get_def() - self.get_atk())*0.3
+            if damage >= 0:
+                opponent.set_current_hp(opponent.get_current_hp() - damage)
         else:
             raise(AttributeError, 'Attack should get a second argument of GameClass!\n')
 
@@ -51,11 +56,7 @@ class BaseClass(object):
 
 
 class GameClass(BaseClass):
-    def __init__(self, hp_range=None, attack_range=None, defense_range=None, speed_range=None, name=None):
-        hp = randint(low=hp_range[0], high=hp_range[1])
-        attack = randint(low=attack_range[0], high=attack_range[1])
-        defense = randint(low=defense_range[0], high=defense_range[1])
-        speed = randint(low=speed_range[0], high=speed_range[1])
+    def __init__(self, hp=None, attack=None, defense=None, speed=None, name=None):
         self.name = name
         super().__init__(hp=hp, attack=attack, defense=defense, speed=speed)
 
@@ -67,33 +68,51 @@ class GameClass(BaseClass):
 
 
 class Warrior(GameClass):
-    def __init__(self, hp_range=None, attack_range=None, defense_range=None, speed_range=None):
-        super().__init__(hp_range=hp_range, attack_range=attack_range, defense_range=defense_range,
-                         speed_range=speed_range, name='Warrior')
+    def __init__(self, hp=None, attack=None, defense=None, speed=None):
+        super().__init__(hp=hp, attack=attack, defense=defense, speed=speed, name='Warrior')
+
+    def set_name(self, name):
+        self.name = 'Warrior_'+str(name)
+
+    @staticmethod
+    def permute_and_give_points(total_points, stats):
+        return np.random.multinomial(total_points, np.ones(stats) / stats, size=1)[0]
 
     @classmethod
-    def make_random_warrior(cls, ranges):
-        return cls(hp_range=ranges['hp'], attack_range=ranges['attack'], defense_range=ranges['defense'],
-                   speed_range=ranges['speed'])
+    def make_random(cls, total_points):
+        hp, attack, defense, speed = Warrior.permute_and_give_points(total_points, 4)
+        return cls(hp=hp, attack=attack, defense=defense, speed=speed)
 
 
 class Wizard(GameClass):
-    def __init__(self, hp_range=None, attack_range=None, defense_range=None, speed_range=None):
-        super().__init__(hp_range=hp_range, attack_range=attack_range, defense_range=defense_range,
-                         speed_range=speed_range, name='Wizard')
+    def __init__(self, hp=None, attack=None, defense=None, speed=None):
+        super().__init__(hp=hp, attack=attack, defense=defense, speed=speed, name='Wizard')
+
+    def set_name(self, name):
+        self.name = 'Wizard_' + str(name)
+
+    @staticmethod
+    def permute_and_give_points(total_points, stats):
+        return np.random.multinomial(total_points, np.ones(stats) / stats, size=1)[0]
 
     @classmethod
-    def make_random_wizard(cls, ranges):
-        return cls(hp_range=ranges['hp'], attack_range=ranges['attack'], defense_range=ranges['defense'],
-                   speed_range=ranges['speed'])
+    def make_random(cls, total_points):
+        hp, attack, defense, speed = Wizard.permute_and_give_points(total_points, 4)
+        return cls(hp=hp, attack=attack, defense=defense, speed=speed)
 
 
 class Rogue(GameClass):
-    def __init__(self, hp_range=None, attack_range=None, defense_range=None, speed_range=None):
-        super().__init__(hp_range=hp_range, attack_range=attack_range, defense_range=defense_range,
-                         speed_range=speed_range, name='Rogue')
+    def __init__(self, hp=None, attack=None, defense=None, speed=None):
+        super().__init__(hp=hp, attack=attack, defense=defense, speed=speed, name='Rogue')
+
+    def set_name(self, name):
+        self.name = 'Rogue_' + str(name)
+
+    @staticmethod
+    def permute_and_give_points(total_points, stats):
+        return np.random.multinomial(total_points, np.ones(stats) / stats, size=1)[0]
 
     @classmethod
-    def make_random_rogue(cls, ranges):
-        return cls(hp_range=ranges['hp'], attack_range=ranges['attack'], defense_range=ranges['defense'],
-                   speed_range=ranges['speed'])
+    def make_random(cls, total_points):
+        hp, attack, defense, speed = Rogue.permute_and_give_points(total_points, 4)
+        return cls(hp=hp, attack=attack, defense=defense, speed=speed)
