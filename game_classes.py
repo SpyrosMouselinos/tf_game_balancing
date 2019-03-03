@@ -42,12 +42,12 @@ class BaseClass(object):
     def attack(self, opponent):
         if isinstance(opponent, BaseClass):
             damage = self.get_atk() - opponent.get_def()
-            return opponent.set_current_hp(opponent.get_current_hp()-damage)
+            return opponent.set_current_hp(opponent.get_current_hp() - damage)
         else:
             raise(AttributeError, 'Attack should get a second argument of GameClass!\n')
 
     def is_dead(self):
-        return self.get_current_hp() > 0
+        return self.get_current_hp() <= 0
 
 
 class GameClass(BaseClass):
