@@ -1,4 +1,5 @@
 import copy
+import tensorflow as tf
 from game_classes import *
 
 
@@ -44,11 +45,14 @@ def battle(x, y):
     return
 
 
-def main():
+def sample_battle():
     x = Warrior().make_random(100)
     y = Wizard().make_random(100)
     battle(x, y)
 
 
+def main():
+    pass
+
 if __name__ == '__main__':
-    main()
+    sample_battle()
